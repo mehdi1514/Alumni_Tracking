@@ -235,12 +235,10 @@
     }
     const getTodos = async () => {
         try {
-            const res = await axios.get(`http://localhost:3000/get_universities`);
-
+            const res = await axios.get(`https://6b199e44.ngrok.io/get_universities`);
             const todos = res.data.universities;
-
-            countries = todos.map(u => u.fname);
-
+            countries = todos.map(u => u.username);
+            console.log(countries);
             autocomplete(document.getElementById("myInput"), countries);
         } catch (e) {
             console.error(e);

@@ -293,6 +293,7 @@ app.post("/fill_details_alumni/:id",isLoggedIn,isAlumni,noAlumInfo, upload.singl
 							if(err){
 								console.log(err);
 							} else {
+								console.log(univ,req.body.university);
 								univ[0].recieved.push(foundalumni);
 								foundalumni.sent.push(univ[0]);
 								foundalumni.institute.push({graduation_date:req.body.year,id:univ[0].length?univ[0].id:null,name:req.body.university});;
@@ -808,6 +809,15 @@ res.redirect("back");
 function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 };
+
+user.find({type:"university"},function(err,universities){
+	if(err){
+		console.log(err);
+	}
+	else{
+		console.log(universities);
+	}
+});
 
 //STARTING THE SERVER ON PORT
 app.listen(process.env.PORT||3000, function(){
