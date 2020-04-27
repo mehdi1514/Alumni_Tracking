@@ -465,18 +465,18 @@ app.get("/send_request/:id",isLoggedIn,function(req,res){
 });
 
 //ACCEPT REQUEST
-app.get("/accept_request/:id",isLoggedIn,function(req,res){
-	user.findById(req.user._id,function(err, from){
-        if(err||!from){
-            console.log(err);
-        } else {
-			user.findById(req.params.id,function(err,to){
-				if(err||!to){
+app.get("/accept_request/:id", isLoggedIn, function (req, res) {
+	user.findById(req.user._id, function (err, from) {
+		if (err || !from) {
+			console.log(err);
+		} else {
+			user.findById(req.params.id, function (err, to) {
+				if (err || !to) {
 					console.log(err);
 				} else {
-					if(from.type=="university"){
-						to.institute.forEach((curr)=>{
-							if(curr.id==from._id){
+					if (from.type == "university") {
+						to.institute.forEach((curr) => {
+							if (curr.id == from._id) {
 								curr.verified = true;
 							}
 						});
@@ -484,25 +484,38 @@ app.get("/accept_request/:id",isLoggedIn,function(req,res){
 					from.accepted.push(to);
 					to.accepted.push(from);
 					var index = -1;
-					to.sent.forEach((currentval,ind,arr)=>{
-						if(currentval == from._id)
-							index= ind;
+					to.sent.forEach((currentval, ind, arr) => {
+						if (currentval == from._id)
+							index = ind;
 					});
-					to.sent.splice(index,1);
+					to.sent.splice(index, 1);
 					index = -1;
-					from.recieved.forEach((currentval,ind,arr)=>{
-						if(currentval == to._id)
-							index= ind;
+					from.recieved.forEach((currentval, ind, arr) => {
+						if (currentval == to._id)
+							index = ind;
 					});
-					noMatch = "No Pending requests";
-					if(foundalumni.recieved.length>0)
-						noMatch = null;
-					res.render("alumni_list",{alumnis:foundalumni.recieved, noMatch: noMatch});
+					from.recieved.splice(index, 1);
+					from.save();
+					to.save();
+					res.redirect("back");
 				}
 			});
 		}
 	});
-})
+});
+
+app.get("/recieved", isLoggedIn, function (req, res) {
+	user.findById(req.user._id).populate("recieved").exec(function (err, foundalumni) {
+		if (err || !foundalumni) {
+			console.log(err);
+		} else {
+			noMatch = "No Pending requests";
+			if (foundalumni.recieved.length > 0)
+				noMatch = null;
+			res.render("alumni_list", { alumnis: foundalumni.recieved, noMatch: noMatch });
+		}
+	});
+});
 
 //RECOMENDATION
 // app.get("/alumni/:id/newrecommendation",isLoggedIn,function(req, res){
