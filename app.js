@@ -646,8 +646,10 @@ app.post("/search_alumni_by_filter",function(req,res){
 		if(err){
 			console.log(err);
 		} else {
+			console.log(allalumnis);
 			filtered = allalumnis.filter((i)=>{
-				for (x = 0; x < i.institute.length; i++) {
+				var l = i.institute.length;
+				for (x = 0; x < l; x++) {
 					if(i.institute[x].name == univ && i.institute[x].graduation_date == year && i.institute[x].branch == branch)
 						return true;
 				}

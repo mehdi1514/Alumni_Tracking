@@ -127,7 +127,6 @@
 <!------ Include the above in your HEAD tag ---------->
 
 <div class="container emp-profile" style="width: 70%; height: 50%;">
-    <form method="post">
         <div class="row">
             <div class="col-md-4">
                 <div class="profile-img">
@@ -272,22 +271,20 @@
                                 <% }) %>
                         
                                 <% if(currentuser && currentuser.id == alumni._id) {%>
-                                <div>
-                                    <form autocomplete="off" action="/alumni/adduniversity" method="POST">
-                                        <div class="autocomplete">
-                                            <label>University Name</label>
-                                            <input id="myInput" type="text" name="university" placeholder="University">
-                                        </div>
-                                        <label>Graduation Year</label>
-                                        <input name="year" placeholder="Year"><br>
-                                        <label>Branch </label>
-                                        <input name="branch" placeholder="Branch">
-                                        <div class="form-group ">
-                                            <button id="btn" style="border-radius: 12px; background-color: #343a41;"
-                                                class="btn btn-primary ">Add University</button>
-                                        </div>
-                                    </form>
-                                </div>
+                                <form autocomplete="off" action="/alumni/adduniversity" method="POST">
+                                    <div class="autocomplete">
+                                        <label>University Name</label>
+                                        <input id="myInput" type="text" name="university" placeholder="University">
+                                    </div>
+                                    <label>Graduation Year</label>
+                                    <input name="year" placeholder="Year"><br>
+                                    <label>Branch </label>
+                                    <input name="branch" placeholder="Branch">
+                                    <div class="form-group ">
+                                        <button id="btn" style="border-radius: 12px; background-color: #343a41;"
+                                            class="btn btn-primary ">Add University</button>
+                                    </div>
+                                </form>
                         
                                 <br>
                                 <form autocomplete="off" action="/alumni/addskill" method="POST">
@@ -304,7 +301,7 @@
                                 <div id="recom" >
                                     <form action="/alumni/<%= alumni._id %>/newrecommendation" method="POST">
                                         <div class="form-group">
-                                            <input style="font-size: 125%;" class="form-control s" type="text" name="text" placeholder="Add Recommendation">
+                                            <input style="font-size: 125%; width: 40%;" class="form-control s" type="text" name="text" placeholder="Add Recommendation">
                                         </div>
                                         <div class="form-group">
                                             <button id="btn" class="btn btn-primary " style="background-color:#343a41;">Add Recommendation</button>
@@ -316,65 +313,17 @@
                                 <% alumni.institute.forEach(function(i){ %>
                                 <div><% if(i.verified){ %>
                                     <%= i.name %><img src="https://image.flaticon.com/icons/svg/1271/1271380.svg" style="width: 20px;"></div>
-                                    <% else{ %> <p><%= i.name %></p>
+                                    <% }else{ %> <p><%= i.name %></p>
                                     <% } %>
                                     
                                 <% }) %>
                             </div>
                             <br><br>
                     </div>
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Experience</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Expert</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Hourly Rate</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>10$/hr</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Total Projects</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>230</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>English Level</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Expert</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label>Availability</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>6 months</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label>Your Bio</label><br />
-                                <p>Your detail description</p>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
-    </form>
 </div>
 
 
@@ -593,11 +542,11 @@
       }
       const getTodos = async () => {
           try {
-              const res = await axios.get(`http://localhost:3000/get_universities`);
+              const res = await axios.get(`https://3b7cbbb0.ngrok.io/get_universities`);
   
               const todos = res.data.universities;
   
-              countries = todos.map(u => u.fname);
+              countries = todos.map(u => u.username);
   
               autocomplete(document.getElementById("myInput"), countries);
           } catch (e) {
