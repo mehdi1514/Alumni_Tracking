@@ -4,72 +4,135 @@
         margin-bottom: 1%;
         text-align: center;
     }
-    img {
-        border-radius: 50%;
-    }
-    body {
+    /* body{
         background: white;
-    }
-</style>
+    } */
+    
+.profile-card-4 {
+    max-width: 300px;
+    background-color: #FFF;
+    border-radius: 5px;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    margin: 10px auto;
+    cursor: pointer;
+}
 
+.profile-card-4 img {
+    transition: all 0.25s linear;
+}
+
+.profile-card-4 .profile-content {
+    position: relative;
+    padding: 15px;
+    background-color: #FFF;
+}
+
+.profile-card-4 .profile-name {
+    font-weight: bold;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: -20px;
+    color: rgb(1, 16, 22);
+    font-size: 17px;
+}
+
+.profile-card-4 .profile-name p {
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+}
+
+.profile-card-4 .profile-description {
+    color: #777;
+    font-size: 12px;
+    padding: 10px;
+}
+
+.profile-card-4 .profile-overview {
+    padding: 15px 0px;
+}
+
+.profile-card-4 .profile-overview p {
+    font-size: 10px;
+    font-weight: 600;
+    color: #777;
+}
+
+.profile-card-4 .profile-overview h4 {
+    color: #273751;
+    font-weight: bold;
+}
+
+.profile-card-4 .profile-content::before {
+    content: "";
+    position: absolute;
+    height: 20px;
+    top: -10px;
+    left: 0px;
+    right: 0px;
+    background-color: #FFF;
+    z-index: 0;
+    transform: skewY(3deg);
+}
+
+.profile-card-4:hover img {
+    transform: rotate(5deg) scale(1.1, 1.1);
+    filter: brightness(110%);
+} 
+</style>
 <br>
 <br>
- <div class="container">
-            <%if(noMatch){%>
-            <h1 style="text-align: center;"><%= noMatch %></h1>
-            <%}else{%>
-      <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% alumnis.forEach(function(alumni){
-            if(alumni.type == "alumni"&&alumni.address) {%>
-            <div class="card col-md-6 col-sm-6 text-center">
-                <div class="thumbnail text-center">
-                   <div class="caption">
-                       <h3><%= alumni.fname %></h3>
-                   </div>
-                  <div class="text-center">    
-            <img class="img" class="img-responsive" src="<%= alumni.image %>" height="100px" width="100px"><br>
-                </div>
-            <p style="font-size: 130%;">
-                       <% if(String(alumni.description).length > 60) {%>
-                        <%= String(alumni.description).slice(0,60) + "..." %>
-                        <%} else{%>
-                        <%= String(alumni.description)%>
-                        <%}%>
-                    </p> 
-                    <p style="font-size: 140%;">
-                        <% if(String(alumni.address).length > 40) {%>
-                            <%= String(alumni.address).slice(0,40) + "..." %>
-                            <%} else{%>
-                            <%= String(alumni.address)%>
-                            <%}%>
-                    </p>
-                    <% if(currentuser && currentuser.type =="alumni" && alumni._id != currentuser.id){ %>
-                    <% if(currentuser.sent.includes(alumni._id)){ %>
-                        <p> Request sent</p>
-                    <% } else if(currentuser.recieved.includes(alumni._id)){ %>
-                        <p>
-                            <a href="/accept_request/<%= alumni.id %>" class="btn btn-primary">Accept Request</a>
-                        </p>
-                    <% } else if(currentuser.accepted.includes(alumni._id)){ %>
-                        <p>Friends</p>
-                    <% } else { %>
-                        <p>
-                            <a href="/send_request/<%= alumni.id %>" class="btn btn-primary">Send Request</a>
-                        </p>
-                    <% }} %>
-                    <% if(currentuser && currentuser.type=="university" && currentuser.recieved.includes(alumni._id)){ %>
-                        <p>
-                            <a href="/accept_request/<%= alumni.id %>" class="btn btn-primary">Accept Request</a>
-                        </p>
-                    <% } %>
-                   <p>
-                       <a href="/alumni/<%= alumni.id %>" class="btn btn-primary">More Info</a>
-                   </p>
-                </div>
-            </div>
-        <% }}); %>
-    </div>
-</div><%}%>
+<div class="container">
+    <%if(noMatch){%>
+        <h1 style="text-align: center;"><%= noMatch %></h1>
+    <%}else{%>
+        <div class="row" style="display:flex; flex-wrap: wrap;">
+            <% alumnis.forEach(function(alumni){
+                if(alumni.type == "alumni"&&alumni.address) {%>
+                    <div class="card col-sm-6 profile-card-4 text-center">
+                        <a href="/alumni/<%= alumni.id %>" ><img src="<%= alumni.image %>" class="img img-responsive" width='225' heighth='225'></a>
+                        <div class="profile-content">
+                            <div class="profile-name"><%= alumni.fname %>
+                                <p>@<%= alumni.username %></p>
+                            </div>
+                            <div class="profile-description"><%= alumni.description %><br><div style="font-size: 20px,text-transform: uppercase;"><b><%= alumni.institute[0].name %>  <img src="https://image.flaticon.com/icons/svg/1271/1271380.svg" class="img img-responsive" width='24' heighth='124'></b></div></div>
+                            <table style="width: 100%;">
+                                <tr>
+                                    <th>FRIENDS</th>
+                                    <th>BLOGS</th>
+                                </tr>
+                                <tr>
+                                    <td><%= alumni.accepted.length %></td>
+                                    <td><%= alumni.blogs.length %></td>
+                                </tr>
+                            </table>
+                            <% if(currentuser && currentuser.type =="alumni" && alumni._id != currentuser.id){ %>
+                                <div class="card-footer">
+                                    <% if(currentuser.sent.includes(alumni._id)){ %>
+                                        <p> Request sent</p>
+                                    <% } else if(currentuser.recieved.includes(alumni._id)){ %>
+                                        <a href="/accept_request/<%= alumni.id %>" class="btn btn-dark" style="background: #343a41;">Accept Request</a>
+                                    <% } else if(currentuser.accepted.includes(alumni._id)){ %>
+                                        <p>Friends</p>
+                                    <% } else { %>
+                                        <a href="/send_request/<%= alumni.id %>" class="btn btn-dark" style="background: #343a41;">Send Request</a>
+                                    <% } %>
+                                    </div>
+                                <% } %>
+                                    <% if(currentuser && currentuser.type=="university" && currentuser.recieved.includes(alumni._id)){ %>
+                                        <div>
+                                            <a href="/accept_request/<%= alumni.id %>" class="btn btn-dark" style="background: #343a41;">Accept Request</a>
+                                        </div>
+                                    <% } %>
+                        </div>
+                    </div>
+            <% }}); %>
+        </div>
+    <%}%>
+</div>
 <br><br>
 
 

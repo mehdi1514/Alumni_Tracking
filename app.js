@@ -494,29 +494,15 @@ app.get("/accept_request/:id",isLoggedIn,function(req,res){
 						if(currentval == to._id)
 							index= ind;
 					});
-					from.recieved.splice(index,1);
-					from.save();
-					to.save();
-					res.redirect("back");
+					noMatch = "No Pending requests";
+					if(foundalumni.recieved.length>0)
+						noMatch = null;
+					res.render("alumni_list",{alumnis:foundalumni.recieved, noMatch: noMatch});
 				}
 			});
-        }
-    });
-});
-
-//VIEW REQUEST
-app.get("/recieved",isLoggedIn,function(req,res){
-	user.findById(req.user._id).populate("recieved").exec(function(err, foundalumni){
-        if(err||!foundalumni){
-            console.log(err);
-        } else {
-			noMatch = "No Pending requests";
-			if(foundalumni.recieved.length>0)
-				noMatch = null;
-			res.render("alumni_list",{alumnis:foundalumni.recieved, noMatch: noMatch});
-        }
-    });
-});
+		}
+	});
+})
 
 //RECOMENDATION
 // app.get("/alumni/:id/newrecommendation",isLoggedIn,function(req, res){

@@ -1,8 +1,388 @@
 <% include partials/header %>
-  <div class="container text-center">   
+<style>
+    #left-side{
+        float: left;
+        position: relative;
+        right: 350px;
+        bottom: 390px;
+    }
+    #recom{
+        
+    }
+    #userimage{
+        width: 250px;
+        height: 250px;
+        background: #343a41;
+        transition: width 0.6s, height 0.6s;
+    }
+    #userimage:hover{
+        width: 300px;
+        height: 300px;
+    }
+    body{
+    /*background: -webkit-linear-gradient(left, #3931af, #00c6ff);*/
+    background: #7F7FD5; 
+    background: -webkit-linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
+    background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5); 
+    }
+.emp-profile{
+    padding: 3%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    border-radius: 0.5rem;
+    background: #fff;
+}
+.profile-img{
+    text-align: center;
+}
+.profile-img img{
+    width: 70%;
+    height: 100%;
+}
+.profile-img .file {
+    position: relative;
+    overflow: hidden;
+    margin-top: -20%;
+    width: 70%;
+    border: none;
+    border-radius: 0;
+    font-size: 15px;
+    background: #212529b8;
+}
+.profile-img .file input {
+    position: absolute;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+.profile-head h5{
+    color: #333;
+}
+.profile-head h6{
+    color: #0062cc;
+}
+.profile-edit-btn{
+    border: none;
+    border-radius: 1.5rem;
+    width: 70%;
+    padding: 2%;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+}
+.proile-rating{
+    font-size: 12px;
+    color: #818182;
+    margin-top: 5%;
+}
+.proile-rating span{
+    color: #495057;
+    font-size: 15px;
+    font-weight: 600;
+}
+.profile-head .nav-tabs{
+    margin-bottom:5%;
+}
+.profile-head .nav-tabs .nav-link{
+    font-weight:600;
+    border: none;
+}
+.profile-head .nav-tabs .nav-link.active{
+    border: none;
+    border-bottom:2px solid #0062cc;
+}
+.profile-work{
+    padding: 14%;
+    margin-top: -15%;
+}
+.profile-work p{
+    font-size: 12px;
+    color: #818182;
+    font-weight: 600;
+    margin-top: 10%;
+}
+.profile-work a{
+    text-decoration: none;
+    color: #495057;
+    font-weight: 600;
+    font-size: 14px;
+}
+.profile-work ul{
+    list-style: none;
+}
+.profile-tab label{
+    font-weight: 600;
+}
+.profile-tab p{
+    font-weight: 600;
+    color: #0062cc;
+}
+</style>
+
+
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container emp-profile" style="width: 70%; height: 50%;">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img class="img" class="img-responsive" src="<%= alumni.image %>" style="border-radius: 50%;" id="userimage">
+                    <div class="file btn btn-lg btn-primary">
+                        Change Photo
+                        <input type="file" name="file" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h1><%= alumni.fname + " " +alumni.lname %></h1>
+                    
+                    <p class="proile-rating">RANKINGS : <span>8/10</span></p>
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                aria-controls="home" aria-selected="true">About</a>
+                        </li>
+                        
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <a type="button" href="/update_profile" class="profile-edit-btn">Edit Profile</a>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                    <% if(currentuser && currentuser.type =="alumni" && alumni._id != currentuser.id){ %>
+                        <% if(currentuser.sent.includes(alumni._id)){ %>
+                            <p> Request sent</p>
+                        <% } else if(currentuser.recieved.includes(alumni._id)){ %>
+                            <p>
+                                <a href="/accept_request/<%= alumni.id %>" class="btn btn-primary">Accept Request</a>
+                            </p>
+                        <% } else if(currentuser.accepted.includes(alumni._id)){ %>
+                            <p>Friends</p>
+                        <% } else { %>
+                            <p>
+                                <a href="/send_request/<%= alumni.id %>" class="btn btn-primary">Send Request</a>
+                            </p>
+                        <% }} %>
+                        <% if(currentuser && currentuser.type =="institute" && currentuser.recieved.includes(alumni._id)){ %>
+                            <p>
+                                <a href="/accept_request/<%= alumni.id %>" class="btn btn-dark" style="background: #343a41; color: white;">Accept Request</a>
+                            </p>
+                        <% } %>
+                   <% if(currentuser && alumni._id.equals(currentuser._id)){%>
+                    <br>
+                    <div>
+                        <a id="button" class="btn btn-dark" style="background: #343a41; color: white" href="/update_profile">Update Profile</a>
+                    </div><%}%>
+                    <br>
+                    <a class="btn btn-dark" style="background: #343a41; color: white;" href = "mailto: <%= alumni.email %>">Send Email</a>
+                   <br>
+                    <br>
+                    <b>SKILLS</b>
+                    <% alumni.skills.forEach(function(skill){ %>
+                    <div><%= skill %></div>
+                    <% }) %>
+                    <br>
+                    
+                    
+                </div>
+            </div>
+            <div class="col-md-8" >
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row"  >
+                            <div class="col-md-6">
+                                <label>User Id</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><%= alumni.username %></p>
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><%= alumni.fname + " " +alumni.lname %></p>
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p ><%= alumni.email %></p>
+                            </div>
+                        </div>
+                        <div class="row" >
+                            <div class="col-md-6">
+                                <label>Phone</label>
+                            </div>
+                            <div class="col-md-6" >
+                                <p><%= alumni.contactnumber %></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Description</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><%= alumni.description %></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Address</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p><%= alumni.address %></p>
+                            </div>
+                        </div>
+                        <div class="address">
+                            <div >
+                                <div id="viewDiv">
+                                    <iframe width="100%" height="450" frameborder="0" style="border:0"
+                                        src="https://www.google.com/maps/embed/v1/place?q=<%= alumni.loc.y %>,<%= alumni.loc.x %>&amp;key=AIzaSyAPzLdcKEPCe4SQf3-cdSnq5vmh_MRaHCs"></iframe>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container" id="left-side">
+                            <div class="appreciation" >
+                                <h3>Recommendations</h3>
+                                <% alumni.appreciations.forEach(function(appreciation){ %>
+                                <div class="inline-block" style="font-size: 125%;">
+                                    <strong><%= appreciation.author.username %></strong> - <%= appreciation.text %>
+                                    <% if(currentuser && appreciation.author.id.equals(currentuser._id)){ %>
+                                    <form id="delete-form" action="/alumni/<%=appreciation._id %>/deleterecommendation" method="POST">
+                                        <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                                    </form>
+                                    <% } %>
+                                </div>
+                                <% }) %>
+                        
+                                <% if(currentuser && currentuser.id == alumni._id) {%>
+                                <div>
+                                    <form autocomplete="off" action="/alumni/adduniversity" method="POST">
+                                        <div class="autocomplete">
+                                            <label>University Name</label>
+                                            <input id="myInput" type="text" name="university" placeholder="University">
+                                        </div>
+                                        <label>Graduation Year</label>
+                                        <input name="year" placeholder="Year"><br>
+                                        <label>Branch </label>
+                                        <input name="branch" placeholder="Branch">
+                                        <div class="form-group ">
+                                            <button id="btn" style="border-radius: 12px; background-color: #343a41;"
+                                                class="btn btn-primary ">Add University</button>
+                                        </div>
+                                    </form>
+                                </div>
+                        
+                                <br>
+                                <form autocomplete="off" action="/alumni/addskill" method="POST">
+                                    <label>Skill</label>
+                                    <input name="skill" placeholder="skill">
+                                    <div class="form-group">
+                                        <button id="btn" style="border-radius: 12px; background-color: #343a41;" class="btn btn-primary ">Add
+                                            Skill</button>
+                                    </div>
+                                </form>
+                                <br>
+                                <% } %>
+                                <% if(currentuser && currentuser.id != alumni._id) {%>
+                                <div id="recom" >
+                                    <form action="/alumni/<%= alumni._id %>/newrecommendation" method="POST">
+                                        <div class="form-group">
+                                            <input style="font-size: 125%;" class="form-control s" type="text" name="text" placeholder="Add Recommendation">
+                                        </div>
+                                        <div class="form-group">
+                                            <button id="btn" class="btn btn-primary " style="background-color:#343a41;">Add Recommendation</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <% } %>
+                                <h3>Institute</h3>
+                                <% alumni.institute.forEach(function(i){ %>
+                                <div><% if(i.verified){ %>
+                                    <%= i.name %><img src="https://image.flaticon.com/icons/svg/1271/1271380.svg" style="width: 20px;"></div>
+                                    <% else{ %> <p><%= i.name %></p>
+                                    <% } %>
+                                    
+                                <% }) %>
+                            </div>
+                            <br><br>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Experience</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Expert</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Hourly Rate</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>10$/hr</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Total Projects</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>230</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>English Level</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Expert</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Availability</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>6 months</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Your Bio</label><br />
+                                <p>Your detail description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+  <!-- <div class="container text-center">   
       <h1></h1>
     <div class="x">
-            <img class="img" class="img-responsive" src="<%= alumni.image %>" width="300px" height="300px" style="border-radius: 50%;">
+            <img class="img" class="img-responsive" src="<%= alumni.image %>" style="border-radius: 50%;" id="userimage">
             </div>
             <% if(currentuser && currentuser.type =="alumni" && alumni._id != currentuser.id){ %>
                 <% if(currentuser.sent.includes(alumni._id)){ %>
@@ -29,10 +409,10 @@
                 <a id="button" class="btn btn-primary" href="/update_profile">Update Profile</a>
             </div><%}%>
             <br>
-            <a class="btn btn-primary" href = "mailto: <%= alumni.email %>">Send Email</a>
+            <a class="btn btn-dark" style="background: #343a41" href = "mailto: <%= alumni.email %>">Send Email</a>
             <h1><%= + alumni.fname + " " +alumni.lname %></h1>
             <br>
-            <a class="btn btn-primary" href = "/viewblog/<%= alumni._id %>">View Blog</a>
+            <a class="btn btn-dark" style="background: #343a41" href = "/viewblog/<%= alumni._id %>">View Blog</a>
             <br>
             <p style="font-weight: 800; font-size: 125%"><%= "Email: " + alumni.email %></p>
             
@@ -66,19 +446,22 @@
                 <div><%= skill %></div>
             <% }) %>
             <% if(currentuser && currentuser.id == alumni._id) {%>
-                <form autocomplete="off" action="/alumni/adduniversity" method="POST">
-                    <div class="autocomplete">
-                        <label>University Name</label>
-                        <input id="myInput" type="text" name="university" placeholder="University">
-                    </div>
-                    <label>Graduation Year</label>
-                    <input name="year" placeholder="Year">
-                    <label>Branch</label>
-                    <input name="branch" placeholder="Branch">
-                    <div class="form-group">
-                        <button id="btn" class="btn btn-primary ">Add University</button>
-                    </div>
-                </form>
+                <div >
+                    <form autocomplete="off" action="/alumni/adduniversity" method="POST">
+                        <div class="autocomplete">
+                            <label>University Name</label>
+                            <input id="myInput" type="text" name="university" placeholder="University">
+                        </div>
+                        <label>Graduation Year</label>
+                        <input name="year" placeholder="Year">
+                        <label>Branch</label>
+                        <input name="branch" placeholder="Branch">
+                        <div class="form-group">
+                            <button id="btn" class="btn btn-primary ">Add University</button>
+                        </div>
+                    </form>
+                </div>
+                
                 <br>
                 <form autocomplete="off" action="/alumni/addskill" method="POST">
                     <label>Skill</label>
@@ -104,7 +487,12 @@
                 <div><%= i.name %><%= i.verified %></div>
             <% }) %>
   </div>
-  <br><br>
+  <br><br> -->
+
+
+
+
+
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
       function autocomplete(inp, arr) {
